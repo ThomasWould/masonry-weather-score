@@ -106,6 +106,7 @@ export function calculateMasonryScore(job: JobInput, weather: Weather) {
   // Determine status based on thresholds
   let status: 'Good' | 'Caution' | 'Avoid' = 'Good'
   let recommendation = 'Conditions look suitable. Proceed with standard precautions.'
+  const suggestions: string[] = []
 
   if (score >= 80 && rainChance <= 40) {
     status = 'Good'
@@ -131,6 +132,24 @@ export function calculateMasonryScore(job: JobInput, weather: Weather) {
     recommendation = 'Conditions are risky for masonry/concrete work. Consider rescheduling.'
   }
 
+  if (maxT > 89) {
+    suggestions.push('Start early to avoid peak afternoon heat.')
+    suggestions.push('Keep concrete moist during curing.')
+  }
+
+  if (rainChance > 30) {
+    suggestions.push('Monitor radar before final finishing.')
+    suggestions.push('Prepare coverings in case of sudden rain.')
+  }
+
+  if (overnightLow < 41) {
+    suggestions.push('Consider insulated blankets overnight.')
+  }
+
+  if (humid < 35 && windMph > dryWindThreshold) {
+    suggestions.push('Rapid surface drying possible. Monitor curing carefully.')
+  }
+
   // Best start window heuristic
   let bestStartWindow = 'Now'
   if (rainChance >= 50) {
@@ -147,5 +166,5 @@ export function calculateMasonryScore(job: JobInput, weather: Weather) {
     bestStartWindow = 'Monitor and plan carefully'
   }
 
-  return { score, status, riskFactors: risks, recommendation, bestStartWindow, optimizedFor }
+  return { score, status, riskFactors: risks, recommendation, bestStartWindow, optimizedFor, suggestions }
 }

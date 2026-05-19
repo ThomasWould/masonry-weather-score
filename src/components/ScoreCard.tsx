@@ -7,9 +7,10 @@ type Props = {
   riskFactors: string[]
   recommendation: string
   optimizedFor?: string
+  suggestions?: string[]
 }
 
-export default function ScoreCard({ score, status, bestStartWindow, riskFactors, recommendation, optimizedFor }: Props) {
+export default function ScoreCard({ score, status, bestStartWindow, riskFactors, recommendation, optimizedFor, suggestions }: Props) {
   const statusClass = status === 'Good' ? 'status-good' : status === 'Caution' ? 'status-caution' : 'status-avoid'
 
   return (
@@ -30,6 +31,17 @@ export default function ScoreCard({ score, status, bestStartWindow, riskFactors,
         <strong>Recommendation</strong>
         <div style={{marginTop:6,color:'#374151'}}>{recommendation}</div>
       </div>
+
+      {suggestions && suggestions.length > 0 && (
+        <div style={{marginTop:12}}>
+          <strong>Suggested Actions</strong>
+          <ul className="risk-list" style={{marginTop:8}}>
+            {suggestions.map((suggestion, i) => (
+              <li key={`suggestion-${i}`}>{suggestion}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {riskFactors && riskFactors.length > 0 && (
         <div style={{marginTop:12}}>

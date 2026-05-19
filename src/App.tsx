@@ -21,6 +21,7 @@ export default function App() {
   const [warning, setWarning] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [usingFallback, setUsingFallback] = useState(false)
+  const [locationCoords, setLocationCoords] = useState<{lat: number; lon: number} | null>(null)
   const [feedbackRefresh, setFeedbackRefresh] = useState(0)
 
   const handleSubmit = async (job: JobInput) => {
@@ -46,6 +47,7 @@ export default function App() {
       }
 
       setLocationName(`Weather for ${location.city}, ${location.state}`)
+      setLocationCoords({ lat: location.lat, lon: location.lon })
 
       let fetchedWeather: Weather | null = null
       let workWindowHourly: HourlyWorkWindowItem[] = []
@@ -111,7 +113,7 @@ export default function App() {
 
         {weather && (
           <div className="results">
-            <WeatherSnapshot weather={weather} locationName={locationName} />
+            <WeatherSnapshot weather={weather} locationName={locationName} lat={locationCoords?.lat} lon={locationCoords?.lon} />
           </div>
         )}
 

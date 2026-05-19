@@ -41,6 +41,8 @@ main{display:flex;flex-direction:column;gap:16px}
 .input{padding:10px;border:1px solid #e5e7eb;border-radius:8px}
 .button{background:var(--accent);color:white;padding:12px;border-radius:10px;border:none;font-weight:700}
 
+.radar-link { margin-top:8px; margin-bottom:8px; display:inline-block }
+
 .feedback-button{min-width:110px}
 .feedback-selected{background:#1d4ed8}
 .feedback-textarea{width:100%;resize:vertical;min-height:100px}
