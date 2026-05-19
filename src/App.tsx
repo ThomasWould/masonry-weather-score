@@ -3,6 +3,8 @@ import WeatherForm from './components/WeatherForm'
 import ScoreCard from './components/ScoreCard'
 import WeatherSnapshot from './components/WeatherSnapshot'
 import WorkWindowBreakdown from './components/WorkWindowBreakdown'
+import FeedbackCard from './components/FeedbackCard'
+import FeedbackHistory from './components/FeedbackHistory'
 import { calculateMasonryScore, type Weather } from './logic/concreteScore'
 import type { JobInput } from './types/job'
 import { getMockWeatherForZip } from './mock/weather'
@@ -11,6 +13,7 @@ import { fetchLocationFromZip, fetchWeatherFromOpenMeteo, type HourlyWorkWindowI
 
 export default function App() {
   const [result, setResult] = useState<ReturnType<typeof calculateMasonryScore> | null>(null)
+  const [currentJob, setCurrentJob] = useState<JobInput | null>(null)
   const [weather, setWeather] = useState<Weather | null>(null)
   const [hourlyBreakdown, setHourlyBreakdown] = useState<HourlyWorkWindowItem[]>([])
   const [locationName, setLocationName] = useState<string | null>(null)
@@ -18,6 +21,7 @@ export default function App() {
   const [warning, setWarning] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [usingFallback, setUsingFallback] = useState(false)
+  const [feedbackRefresh, setFeedbackRefresh] = useState(0)
 
   const handleSubmit = async (job: JobInput) => {
     setError(null)
@@ -28,6 +32,7 @@ export default function App() {
     setHourlyBreakdown([])
 
     try {
+      setCurrentJob(job)
       let location = null
       try {
         location = await fetchLocationFromZip(job.zip)
@@ -98,12 +103,6 @@ export default function App() {
           </div>
         )}
 
-        {loading && (
-          <div className="card" style={{background:'#fef3c7',color:'#92400e',padding:12,borderRadius:8}}>
-            <strong>Loading weather data...</strong>
-          </div>
-        )}
-
         {!loading && !weather && !error && !warning && (
           <div className="card" style={{background:'#eff6ff',color:'#1d4ed8',padding:12,borderRadius:8}}>
             Enter a ZIP code and job details to get a masonry weather score.
@@ -134,6 +133,23 @@ export default function App() {
             <WorkWindowBreakdown items={hourlyBreakdown} />
           </section>
         )}
+
+        {currentJob && weather && result && (
+          <section className="results">
+            <FeedbackCard
+              job={currentJob}
+              weather={weather}
+              result={result}
+              locationName={locationName}
+              hourlyBreakdown={hourlyBreakdown}
+              onSaved={() => setFeedbackRefresh((value) => value + 1)}
+            />
+          </section>
+        )}
+
+        <section className="results">
+          <FeedbackHistory refreshKey={feedbackRefresh} />
+        </section>
       </main>
 
       <footer>

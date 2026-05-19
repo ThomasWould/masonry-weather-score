@@ -41,6 +41,10 @@ main{display:flex;flex-direction:column;gap:16px}
 .input{padding:10px;border:1px solid #e5e7eb;border-radius:8px}
 .button{background:var(--accent);color:white;padding:12px;border-radius:10px;border:none;font-weight:700}
 
+.feedback-button{min-width:110px}
+.feedback-selected{background:#1d4ed8}
+.feedback-textarea{width:100%;resize:vertical;min-height:100px}
+
 .hourly-grid{display:grid;gap:10px;margin-top:10px}
 .hourly-row{display:grid;grid-template-columns:1.1fr 0.8fr 1fr 0.8fr 1fr;gap:10px;align-items:center;padding:10px;border-radius:12px;background:#f8fafc;border:1px solid #e5e7eb}
 .hourly-row span{font-size:0.9rem}
